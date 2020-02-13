@@ -1,0 +1,241 @@
+void driveForwardsPID(float target,int timeOut,int maxVelocity){
+  resetSensors();
+  float Kp = 35;
+  float Ki = 0.01;
+  float Kd = 18;
+  float Error;
+  float Proportion;
+  float Intergral;
+  float Derivative;
+  float IntergralActiveZone = inchToTicks(3);
+  float LastError;
+  float FinalVelocity;
+  float IntergralVelocityLimit = 5/Ki;
+  float maxVoltage = percentToVoltage(maxVelocity);
+  float Kp_C = 0.05;
+  int error_drift = gyro.get_value();
+  float proportion_drift;
+  long  EndTime;
+  EndTime = pros::millis() + timeOut;
+  while (pros::millis() < EndTime){
+    Error = inchToTicks(target) - ((Right_Front_Drive.get_position() + Right_Back_Drive.get_position() + Left_Back_Drive.get_position() + Left_Front_Drive.get_position())/4);
+      Proportion = Error;
+
+    if (fabs(Error) < IntergralActiveZone && fabs(Error) != 0){
+      Intergral = Intergral + Error;
+    }
+    else {
+      Intergral = 0;
+    }
+    if (Intergral > IntergralVelocityLimit){
+      Intergral = IntergralVelocityLimit;
+    }
+    if (Intergral < IntergralVelocityLimit){
+      Intergral = -IntergralVelocityLimit;
+    }
+    Derivative = (Error - LastError);
+    LastError = Error;
+    if (Error == 0){
+      Derivative = 0;
+    }
+    FinalVelocity = ((Kp*Proportion) + (Ki*Intergral) + (Kd*Derivative));
+    if (FinalVelocity > maxVoltage){
+      FinalVelocity = maxVoltage;
+    }
+    else if (FinalVelocity < -maxVoltage){
+      FinalVelocity = -maxVoltage;
+    }
+
+    error_drift  = gyro.get_value();
+    proportion_drift = Kp_C * error_drift;
+    moveDriveTrain(FinalVelocity);
+
+
+    pros::delay(20);
+  }
+  driveTrainBreaking();
+  moveDriveTrain(0);
+  gyro.reset();
+  }
+
+void driveBackwardsPID(float target,int timeOut,int maxVelocity){
+  resetSensors();
+  float Kp = 35;
+  float Ki = 0.01;
+  float Kd = 18;
+  float Error;
+  float Proportion;
+  float Intergral;
+  float Derivative;
+  float IntergralActiveZone = inchToTicks(3);
+  float LastError;
+  float FinalVelocity;
+  float IntergralVelocityLimit = 5/Ki;
+  float maxVoltage = percentToVoltage(maxVelocity);
+  float Kp_C = 0.05;
+  int error_drift = gyro.get_value();
+  float proportion_drift;
+  long  EndTime;
+  EndTime = pros::millis() + timeOut;
+  while (pros::millis() < EndTime){
+    Error = inchToTicks(target) - ((Right_Front_Drive.get_position() + Right_Back_Drive.get_position() + Left_Back_Drive.get_position() + Left_Front_Drive.get_position())/4);
+      Proportion = Error;
+
+    if (fabs(Error) < IntergralActiveZone && fabs(Error) != 0){
+      Intergral = Intergral + Error;
+    }
+    else {
+      Intergral = 0;
+    }
+    if (Intergral > IntergralVelocityLimit){
+      Intergral = IntergralVelocityLimit;
+    }
+    if (Intergral < IntergralVelocityLimit){
+      Intergral = -IntergralVelocityLimit;
+    }
+    Derivative = (Error - LastError);
+    LastError = Error;
+    if (Error == 0){
+      Derivative = 0;
+    }
+    FinalVelocity = ((Kp*Proportion) + (Ki*Intergral) + (Kd*Derivative));
+    if (FinalVelocity > maxVoltage){
+      FinalVelocity = maxVoltage;
+    }
+    else if (FinalVelocity < -maxVoltage){
+      FinalVelocity = -maxVoltage;
+    }
+
+    error_drift  = gyro.get_value();
+    proportion_drift = Kp_C * error_drift;
+    moveDriveTrain(-FinalVelocity);
+
+
+    pros::delay(20);
+  }
+  driveTrainBreaking();
+  moveDriveTrain(0);
+  gyro.reset();
+  }
+
+  void TurnRightPID(float Target,int TimeOut,int MaxVelocity){
+    resetSensors();
+    float Kp = 35;
+    float Ki = 0.01;
+    float Kd = 18;
+    float Error;
+    float Proportion;
+    float Intergral;
+    float Derivative;
+    float IntergralActiveZone = inchToTicks(3);
+    float LastError;
+    float FinalVelocity;
+    float IntergralVelocityLimit = 5/Ki;
+    float maxVoltage = percentToVoltage(MaxVelocity);
+    float Kp_C = 0.05;
+    int error_drift = gyro.get_value();
+    float proportion_drift;
+    long  EndTime;
+    EndTime = pros::millis() + TimeOut;
+    while (pros::millis() < EndTime){
+       Error = degreesToTicksLeft(Target) - (-(Right_Front_Drive.get_position() + Right_Back_Drive.get_position()) + (Left_Back_Drive.get_position() + Left_Front_Drive.get_position())/4);
+        Proportion = Error;
+
+      if (fabs(Error) < IntergralActiveZone && fabs(Error) != 0){
+        Intergral = Intergral + Error;
+      }
+      else {
+        Intergral = 0;
+      }
+      if (Intergral > IntergralVelocityLimit){
+        Intergral = IntergralVelocityLimit;
+      }
+      if (Intergral < IntergralVelocityLimit){
+        Intergral = -IntergralVelocityLimit;
+      }
+      Derivative = (Error - LastError);
+      LastError = Error;
+      if (Error == 0){
+        Derivative = 0;
+      }
+      FinalVelocity = ((Kp*Proportion) + (Ki*Intergral) + (Kd*Derivative));
+      if (FinalVelocity > maxVoltage){
+        FinalVelocity = maxVoltage;
+      }
+      else if (FinalVelocity < -maxVoltage){
+        FinalVelocity = -maxVoltage;
+      }
+
+      error_drift  = gyro.get_value();
+      proportion_drift = Kp_C * error_drift;
+      moveRightDriveTrain(-FinalVelocity);
+      moveLeftDriveTrain(FinalVelocity);
+
+      pros::delay(20);
+    }
+    driveTrainBreaking();
+    moveDriveTrain(0);
+    gyro.reset();
+    }
+
+   void TurnLeftPID(float Target,int TimeOut,int MaxVelocity){
+     resetSensors();
+     float Kp = 35;
+     float Ki = 0.01;
+     float Kd = 18;
+     float Error;
+     float Proportion;
+     float Intergral;
+     float Derivative;
+     float IntergralActiveZone = inchToTicks(3);
+     float LastError;
+     float FinalVelocity;
+     float IntergralVelocityLimit = 5/Ki;
+     float maxVoltage = percentToVoltage(MaxVelocity);
+     float Kp_C = 0.05;
+     int error_drift = gyro.get_value();
+     float proportion_drift;
+     long  EndTime;
+     EndTime = pros::millis() + TimeOut;
+     while (pros::millis() < EndTime){
+       Error = degreesToTicksLeft(Target) - ((Right_Front_Drive.get_position() + Right_Back_Drive.get_position()) + (-(Left_Back_Drive.get_position() + Left_Front_Drive.get_position()))/4);
+         Proportion = Error;
+
+       if (fabs(Error) < IntergralActiveZone && fabs(Error) != 0){
+         Intergral = Intergral + Error;
+       }
+       else {
+         Intergral = 0;
+       }
+       if (Intergral > IntergralVelocityLimit){
+         Intergral = IntergralVelocityLimit;
+       }
+       if (Intergral < IntergralVelocityLimit){
+         Intergral = -IntergralVelocityLimit;
+       }
+       Derivative = (Error - LastError);
+       LastError = Error;
+       if (Error == 0){
+         Derivative = 0;
+       }
+       FinalVelocity = ((Kp*Proportion) + (Ki*Intergral) + (Kd*Derivative));
+       if (FinalVelocity > maxVoltage){
+         FinalVelocity = maxVoltage;
+       }
+       else if (FinalVelocity < -maxVoltage){
+         FinalVelocity = -maxVoltage;
+       }
+
+       error_drift  = gyro.get_value();
+       proportion_drift = Kp_C * error_drift;
+       moveRightDriveTrain(FinalVelocity);
+       moveLeftDriveTrain(-FinalVelocity);
+
+       pros::delay(20);
+     }
+     driveTrainBreaking();
+     moveDriveTrain(0);
+     gyro.reset();
+     }
+
+    
