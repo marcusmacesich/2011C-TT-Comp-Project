@@ -282,7 +282,7 @@ void stackSet(float TimeOut){
   float AngMin = 1500;
   float AngMax = 10;
   float AngVal = Ang_Pot.get_value();
-  float MaxAcc = 148;
+  float MaxAcc = 145;
   float AnglerVelocity;
   float VelocityInterval;
 

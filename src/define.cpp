@@ -9,11 +9,11 @@ Don't forget to add the extern in the main.h file
 
 #define Arm_Port 12
 #define Angler_Port 11
-#define Right_Front_Port 16
+#define Right_Front_Port 18
 #define Right_Back_Port 13
 #define Left_Front_Port 17
 #define Left_Back_Port 19
-#define Left_Roller_Port 7
+#define Left_Roller_Port 6
 #define Right_Roller_Port 2
 #define Ang_Pot_Port 'A'
 #define lEncP1 'C'

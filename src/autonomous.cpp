@@ -40,9 +40,9 @@ void frontRed(){
   drive("r",30,950,60);         //Turn Left With Back Towards Second Line//
   drive("b",50,1600,70);     //Drive Towards Second Line//
   drive("l",30,900,50);   //Line Up With The Cubes//
-  drive("f",31,1400,40);    //Pick up Second Line of Cubes//
-  drive("r",115,1600,45);       //Turn Towaards Scoring Zone//
-  rollUptake(-28);          //Start Moving Bottom Cube Towards Bottom of Tray//
+  drive("f",29,1400,40);    //Pick up Second Line of Cubes//
+  drive("r",11,1600,45);       //Turn Towaards Scoring Zone//
+  rollUptake(-29);          //Start Moving Bottom Cube Towards Bottom of Tray//
   drive("f",39,1450,60); //Drive Towards Zone //
   stackSet(1800);     //Raise Angler And Set Stack//
   drive("b",10,2000,100);//Drive Away//
